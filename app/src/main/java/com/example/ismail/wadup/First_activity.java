@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
-
+// a test activity you will not see it on the app
 public class First_activity extends AppCompatActivity {
 private String strID ;
 private String  recipientId ;
@@ -27,7 +27,7 @@ private String  recipientId ;
         return new BigInteger(10, random).toString(32);
 }
 public void next (View v)
-{EditText rid= (EditText) findViewById(R.id.recipint) ;
+{   EditText rid= (EditText) findViewById(R.id.recipint) ;
     DataHolder.getInstance().setType(v.getId());
     recipientId=rid.getText().toString() ;
     Intent intent = new Intent(getApplicationContext(), FullscreenActivity.class);

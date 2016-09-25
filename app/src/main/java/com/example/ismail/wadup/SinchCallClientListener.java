@@ -1,10 +1,12 @@
 package com.example.ismail.wadup;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.sinch.android.rtc.SinchClient;
@@ -22,22 +24,38 @@ public class SinchCallClientListener implements CallClientListener {
 
     @Override
     public void onIncomingCall(CallClient callClient, Call incomingCall) {
-        Button button = (Button) a.findViewById(R.id.call) ;
-        //call = incomingCall;
-        //call.answer();
-        if (! incomingCall.getDetails().isVideoOffered())
-        {incomingCall.addCallListener(new SinchCallListener(a));}
-        else
-        {
-            DataHolder.getInstance().setVidadd(false);
-            incomingCall.addCallListener(new SinchVidListner(a));
-        }
+
         DataHolder.getInstance().setCall(incomingCall);
+       if (DataHolder.getInstance().isDone())
+       {
+           a=DataHolder.getInstance().getAct() ;
+           if (! incomingCall.getDetails().isVideoOffered())
+           {incomingCall.addCallListener(new SinchCallListener(a));}
+           else
+           {
+               DataHolder.getInstance().setVidadd(false);
+               incomingCall.addCallListener(new SinchVidListner(a));
+           }
+
+           Button button = (Button) a.findViewById(R.id.call) ;
+        Button aud =(Button) a.findViewById(R.id.next) ;
+        Button vid =(Button) a.findViewById(R.id.nextv) ;
         TextView callState = (TextView) a.findViewById(R.id.fullscreen_content);
         callState.setText("Ringing");
         button.setText("Answer");
         Button dec = (Button) a.findViewById(R.id.Decline) ;
-        dec.setVisibility(View.VISIBLE);
+        aud.setVisibility(View.GONE);
+        vid.setVisibility(View.GONE);
+        button.setVisibility(View.VISIBLE);
+        dec.setVisibility(View.VISIBLE);}
+        else
+       {
+           Intent intent = new Intent(a.getApplicationContext(), FullscreenActivity.class);
+           intent.putExtra("recipientId",incomingCall.getRemoteUserId());
+           a.startActivity(intent);
+
+       }
+
         DataHolder.getInstance().play();
 
     }

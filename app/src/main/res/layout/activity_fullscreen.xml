@@ -2,11 +2,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0099cc"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#7E57C2"
     tools:context="com.example.ismail.wadup.FullscreenActivity"
-    android:id="@+id/ok"
-    >
-
+    android:id="@+id/ok">
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/my_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@android:color/transparent"
+        android:elevation="4dp"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark"/>
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
@@ -16,7 +22,7 @@
     android:id="@+id/trust"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0099cc"
+    android:background="#7E57C2"
     >
 </LinearLayout>
     <LinearLayout
@@ -24,7 +30,7 @@
         android:id="@+id/local"
         android:layout_width="121dp"
         android:layout_height="151dp"
-        android:background="#0099cc"
+        android:background="#7E57C2"
         android:layout_gravity="top|right">
 </LinearLayout>
 
@@ -32,6 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
+        android:id="@+id/bigtext"
         >
         <TextView
             android:id="@+id/fullscreen_content"
@@ -40,7 +47,7 @@
             android:gravity="center"
             android:keepScreenOn="true"
             android:text="Hi !"
-            android:textColor="#33b5e5"
+            android:textColor="#B39DDB"
             android:textSize="50sp"
             android:textStyle="bold" />
 
@@ -63,7 +70,9 @@
             android:layout_gravity="bottom|center_horizontal"
             android:background="@color/black_overlay"
             android:orientation="horizontal"
-            tools:ignore="UselessParent">
+            tools:ignore="UselessParent"
+
+            >
 
             <Button
                 android:id="@+id/call"
@@ -73,7 +82,9 @@
                 android:layout_weight="1"
                 android:text="Call"
                 android:textColor="#09d30d"
-                android:onClick="makecall" />
+                android:onClick="makecall"
+                android:visibility="gone"
+                />
 
             <Button
                 style="?metaButtonBarButtonStyle"
@@ -85,8 +96,31 @@
                 android:onClick="endcall"
                 android:visibility="gone"
                 />
+            <Button
+                android:id="@+id/nextv"
+                style="?metaButtonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="video chat"
+                android:textColor="#B39DDB"
+                android:background="@color/black_overlay"
+                android:onClick="makecall" />
+            //android:drawableLeft="@android:drawable/sym_call_outgoing"
+            <Button
+                android:id="@+id/next"
+                style="?metaButtonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="voice chat"
+                android:textColor="#B39DDB"
+                android:background="@color/black_overlay"
+                android:onClick="makecall" />
 
         </LinearLayout>
+
+
 
     </FrameLayout>
 

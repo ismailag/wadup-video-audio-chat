@@ -3,30 +3,26 @@ package com.example.ismail.wadup;
 import android.app.Activity;
 import android.graphics.Color;
 import android.media.AudioManager;
-import android.opengl.GLSurfaceView;
-import android.view.LayoutInflater;
-import android.view.TextureView;
+
 import android.view.View;
 
 import com.sinch.android.rtc.AudioController;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.calling.Call;
+import com.sinch.android.rtc.calling.CallEndCause;
 import com.sinch.android.rtc.video.VideoCallListener;
 import com.sinch.android.rtc.video.VideoController;
-import com.sinch.android.rtc.video.VideoScalingType;
-
-import android.app.Service;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 public class SinchVidListner implements VideoCallListener {
     private Activity a ;
     private TextView callState ;
-    private Button dec ;
+    private Button dec,aud,vid,button ;
     private LinearLayout gl ;
     private LinearLayout gl2;
 
@@ -36,7 +32,9 @@ public class SinchVidListner implements VideoCallListener {
         a=act;
         callState = (TextView) a.findViewById(R.id.fullscreen_content);
         dec=(Button) a.findViewById(R.id.Decline) ;
-
+        aud=(Button) a.findViewById(R.id.next) ;
+        vid=(Button) a.findViewById(R.id.nextv) ;
+        button=(Button) a.findViewById(R.id.call);
     }
     @Override
     public void onVideoTrackAdded(Call call) {
@@ -68,13 +66,15 @@ public class SinchVidListner implements VideoCallListener {
         a.setVolumeControlStream(AudioManager.USE_DEFAULT_STREAM_TYPE);
         callState.setText("");
         dec.setVisibility(View.GONE);
+        aud.setVisibility(View.GONE);
+        vid.setVisibility(View.GONE);
+        button.setVisibility(View.VISIBLE);
 
     }
 
     @Override
     public void onCallEnded(Call call) {
         DataHolder.getInstance().setCall(null);
-        Button button = (Button) a.findViewById(R.id.call) ;
         button.setText("Call");
         a.setVolumeControlStream(AudioManager.USE_DEFAULT_STREAM_TYPE);
        if (gl!=null)
@@ -86,7 +86,19 @@ public class SinchVidListner implements VideoCallListener {
         callState.setText("Call ended");
         DataHolder.getInstance().stop();
         dec.setVisibility(View.GONE);
+        aud.setVisibility(View.VISIBLE);
+        vid.setVisibility(View.VISIBLE);
+        button.setVisibility(View.GONE);
         DataHolder.getInstance().setVidadd(false);
+
+        if(call.getDetails().getEndCause()== CallEndCause.DENIED)
+            Toast.makeText(a,"Call declined",Toast.LENGTH_SHORT).show();
+        else if (call.getDetails().getEndCause()==CallEndCause.NO_ANSWER)
+            Toast.makeText(a,"No answer",Toast.LENGTH_SHORT).show();
+        else if (call.getDetails().getEndCause()==CallEndCause.FAILURE)
+            Toast.makeText(a,"Connection failed",Toast.LENGTH_SHORT).show();
+        else if (call.getDetails().getEndCause()==CallEndCause.OTHER_DEVICE_ANSWERED)
+            Toast.makeText(a,"Destination occupied by another call",Toast.LENGTH_LONG).show();
 
     }
 

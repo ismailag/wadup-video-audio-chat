@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -14,11 +15,15 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.widget.Toolbar;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.client.Firebase;
 import com.sinch.android.rtc.ClientRegistration;
 import com.sinch.android.rtc.Sinch;
 import com.sinch.android.rtc.SinchClient;
@@ -38,6 +43,8 @@ public class FullscreenActivity extends AppCompatActivity {
     private String recipientId;
     private String callerId ;
     private MediaPlayer player ;
+    private Button vid , aud ;
+
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -84,6 +91,7 @@ public class FullscreenActivity extends AppCompatActivity {
                 actionBar.show();
             }
             mControlsView.setVisibility(View.VISIBLE);
+
         }
     };
     private boolean mVisible;
@@ -118,7 +126,6 @@ public class FullscreenActivity extends AppCompatActivity {
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
 
-
         // Set up the user interaction to manually show or hide the system UI.
         mContentView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -128,44 +135,42 @@ public class FullscreenActivity extends AppCompatActivity {
         });
         setTitle("");
         android.content.Context context = this.getApplicationContext();
-        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-        player = MediaPlayer.create(this, notification);
-        player.setLooping(true);
-        DataHolder.getInstance().setplayer(player);
         Intent intent = getIntent();
-        callerId = intent.getStringExtra("callerId");
+
         recipientId = intent.getStringExtra("recipientId");
-        sinchClient = Sinch.getSinchClientBuilder().context(context)
-                .applicationKey("8f602396-3987-475f-b0ea-a5e115db3085")
-                .applicationSecret("jZ89mRY/REWZ9TbXUtxDdg==")
-                .environmentHost("sandbox.sinch.com")
-                .userId(callerId )
-                .build();
-        sinchClient.setSupportMessaging(true);
-        sinchClient.setSupportCalling(true);
-     //   sinchClient.setSupportManagedPush(true);
-// or
-        sinchClient.setSupportActiveConnectionInBackground(true);
-        sinchClient.startListeningOnActiveConnection() ;
-        sinchClient.addSinchClientListener(new SinchClientListener() {
-            public void onClientStarted(SinchClient client) { }
-            public void onClientStopped(SinchClient client) { }
-            public void onClientFailed(SinchClient client, SinchError error) { }
-            public void onRegistrationCredentialsRequired(SinchClient client, ClientRegistration registrationCallback) { }
-            public void onLogMessage(int level, String area, String message) { }
-        });
-        sinchClient.startListeningOnActiveConnection();
-        sinchClient.getCallClient().addCallClientListener(new SinchCallClientListener(this));
-        sinchClient.start();
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+        mToolbar.setBackgroundColor(Color.TRANSPARENT);
+        sinchClient=DataHolder.getInstance().getClient();
         findViewById(R.id.call).setOnTouchListener(mDelayHideTouchListener);
         findViewById(R.id.Decline).setOnTouchListener(mDelayHideTouchListener);
         button = (Button) findViewById(R.id.call) ;
-        DataHolder.getInstance().setClient(sinchClient);
-        ActivityCompat.requestPermissions(FullscreenActivity.this, new String[]{Manifest.permission.RECORD_AUDIO}, 1);
-        ActivityCompat.requestPermissions(FullscreenActivity.this, new String[]{Manifest.permission.CAMERA}, 1);
+        vid =(Button) findViewById(R.id.nextv);
+        aud=(Button) findViewById(R.id.next);
+        //DataHolder.getInstance().setClient(sinchClient);
+
+            if (! DataHolder.getInstance().isDone())
+            {   call=DataHolder.getInstance().getCall() ;
+                if (! call.getDetails().isVideoOffered())
+            {call.addCallListener(new SinchCallListener(this));}
+            else
+            {
+                DataHolder.getInstance().setVidadd(false);
+                call.addCallListener(new SinchVidListner(this));
+            }
+                TextView callState = (TextView) findViewById(R.id.fullscreen_content);
+                callState.setText("Ringing");
+                button.setText("Answer");
+                Button dec = (Button) findViewById(R.id.Decline) ;
+                aud.setVisibility(View.GONE);
+                vid.setVisibility(View.GONE);
+                button.setVisibility(View.VISIBLE);
+                dec.setVisibility(View.VISIBLE);
+                DataHolder.getInstance().setDone(true);
+            }
+        DataHolder.getInstance().setAct(this);
     }
 
     @Override
@@ -222,9 +227,18 @@ public class FullscreenActivity extends AppCompatActivity {
     }
    public void makecall(View v)
    {//DataHolder.getInstance().getCall().addCallListener(new SinchCallListener(this));
-        int type = DataHolder.getInstance().getType();
+      if (! DataHolder.getInstance().isOnline())
+       {
+           Toast.makeText(this, "connection Lost",Toast.LENGTH_LONG).show();
+           return;
+       }
+       int type = v.getId();
+       DataHolder.getInstance().setType(type);
        call=DataHolder.getInstance().getCall() ;
        if (call == null && sinchClient.isStarted()) {//make a call
+           aud.setVisibility(View.GONE);
+           vid.setVisibility(View.GONE);
+           button.setVisibility(View.VISIBLE);
            if (type==R.id.next) //when it's a just voice call
            {call=sinchClient.getCallClient().callUser(recipientId) ;
            call.addCallListener(new SinchCallListener(this));}
@@ -243,6 +257,10 @@ public class FullscreenActivity extends AppCompatActivity {
            call=null ;
            DataHolder.getInstance().setCall(call) ;
            button.setText("Call");
+
+          button.setVisibility(View.GONE);
+           aud.setVisibility(View.VISIBLE);
+           vid.setVisibility(View.VISIBLE);
        }
        else if  (button.getText()=="Answer")  { //answer
            DataHolder.getInstance().stop();
@@ -265,40 +283,21 @@ public class FullscreenActivity extends AppCompatActivity {
         call=null ;
         DataHolder.getInstance().setCall(call);
         DataHolder.getInstance().stop();
-        button.setText("Call");}
+        button.setText("Call");
+        button.setVisibility(View.GONE);
+        aud.setVisibility(View.VISIBLE);
+        vid.setVisibility(View.VISIBLE);
+    }
     }
 
     @Override
     protected void onDestroy() {
-        sinchClient.stopListeningOnActiveConnection();
-        sinchClient.terminateGracefully();
+        //sinchClient.stopListeningOnActiveConnection();
+        //sinchClient.terminateGracefully();
+       //Firebase pres= new  Firebase("https://wadup-a1d4b.firebaseio.com/pres/"+callerId);
+        //pres.removeValue();
         super.onDestroy();
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case 1: {
-
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    Toast.makeText(FullscreenActivity.this, "Permission denied to read your External storage", Toast.LENGTH_SHORT).show();
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
-    }
 
 }
