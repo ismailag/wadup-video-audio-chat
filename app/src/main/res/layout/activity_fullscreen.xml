@@ -17,14 +17,14 @@
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
 
-<LinearLayout
-    android:orientation="horizontal"
-    android:id="@+id/trust"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#7E57C2"
-    >
-</LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/trust"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#7E57C2"
+        >
+    </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
         android:id="@+id/local"
@@ -32,7 +32,7 @@
         android:layout_height="151dp"
         android:background="#7E57C2"
         android:layout_gravity="top|right">
-</LinearLayout>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -93,6 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="Decline"
+                android:textColor="#FB0C06"
                 android:onClick="endcall"
                 android:visibility="gone"
                 />

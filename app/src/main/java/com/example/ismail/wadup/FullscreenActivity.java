@@ -227,15 +227,16 @@ public class FullscreenActivity extends AppCompatActivity {
     }
    public void makecall(View v)
    {//DataHolder.getInstance().getCall().addCallListener(new SinchCallListener(this));
-      if (! DataHolder.getInstance().isOnline())
-       {
-           Toast.makeText(this, "connection Lost",Toast.LENGTH_LONG).show();
-           return;
-       }
+
        int type = v.getId();
        DataHolder.getInstance().setType(type);
        call=DataHolder.getInstance().getCall() ;
        if (call == null && sinchClient.isStarted()) {//make a call
+           if (! DataHolder.getInstance().isOnline())
+           {
+               Toast.makeText(this, "connection Lost",Toast.LENGTH_LONG).show();
+               return;
+           }
            aud.setVisibility(View.GONE);
            vid.setVisibility(View.GONE);
            button.setVisibility(View.VISIBLE);
@@ -292,11 +293,23 @@ public class FullscreenActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        //sinchClient.stopListeningOnActiveConnection();
-        //sinchClient.terminateGracefully();
-       //Firebase pres= new  Firebase("https://wadup-a1d4b.firebaseio.com/pres/"+callerId);
-        //pres.removeValue();
         super.onDestroy();
+        endcall(button) ;
+
+    }
+
+@Override
+    protected void onPause()
+{
+    super.onPause();
+    endcall(button) ;
+
+}
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+        endcall(button) ;
     }
 
 

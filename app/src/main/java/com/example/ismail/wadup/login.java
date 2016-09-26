@@ -53,52 +53,52 @@ public class login extends AppCompatActivity {
             Toast.makeText(this,"Password should contain more than 6 chars",Toast.LENGTH_SHORT).show();
             return;
         }
-    if (v==signiup)
-    {auth.createUserWithEmailAndPassword(email,pw).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-        @Override
-        public void onComplete(@NonNull Task<AuthResult> task) {
-            if(task.isSuccessful())
-            {
-
-                Intent intent = new Intent(getApplicationContext(), Users.class);
-                //ntent.putExtra("callerId",email);
-                //intent.putExtra("recipientId", "jj");
-                startActivity(intent);
-                progress.dismiss();
-                finish() ;
-
-            }
-            else
-            {progress.cancel();Toast.makeText(login.this,"Could not register",Toast.LENGTH_LONG).show();}
-            }
-
-    }) ;
-        progress.setMessage("Registering the new user ...");
-        progress.show();
-    }
-
-    else
-    {
-        auth.signInWithEmailAndPassword(email,pw).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+        if (v==signiup)
+        {auth.createUserWithEmailAndPassword(email,pw).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if(task.isSuccessful())
                 {
+
                     Intent intent = new Intent(getApplicationContext(), Users.class);
-                   // intent.putExtra("callerId",email);
+                    //ntent.putExtra("callerId",email);
                     //intent.putExtra("recipientId", "jj");
-                    progress.dismiss();
                     startActivity(intent);
+                    progress.dismiss();
                     finish() ;
+
                 }
                 else
-                {progress.cancel();Toast.makeText(login.this,"Could not login",Toast.LENGTH_LONG).show();}
+                {progress.cancel();Toast.makeText(login.this,"Could not register",Toast.LENGTH_LONG).show();}
             }
 
         }) ;
-        progress.setMessage("Cheking your account ...");
-        progress.show();
-    }
+            progress.setMessage("Registering the new user ...");
+            progress.show();
+        }
+
+        else
+        {
+            auth.signInWithEmailAndPassword(email,pw).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if(task.isSuccessful())
+                    {
+                        Intent intent = new Intent(getApplicationContext(), Users.class);
+                        // intent.putExtra("callerId",email);
+                        //intent.putExtra("recipientId", "jj");
+                        progress.dismiss();
+                        startActivity(intent);
+                        finish() ;
+                    }
+                    else
+                    {progress.cancel();Toast.makeText(login.this,"Could not login",Toast.LENGTH_LONG).show();}
+                }
+
+            }) ;
+            progress.setMessage("Cheking your account ...");
+            progress.show();
+        }
     }
 
 }

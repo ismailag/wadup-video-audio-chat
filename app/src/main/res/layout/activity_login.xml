@@ -11,7 +11,7 @@
     tools:context="com.example.ismail.wadup.login">
     <LinearLayout
         android:orientation="vertical"
-       android:layout_centerHorizontal="true"
+        android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -76,8 +76,8 @@
                     android:textColor="#B39DDB"
                     android:background="@color/black_overlay"
                     android:onClick="register"
-                     />
-                //android:drawableLeft="@android:drawable/sym_call_outgoing"
+                    />
+
                 <Button
                     android:id="@+id/login"
                     style="?metaButtonBarButtonStyle"
@@ -88,7 +88,7 @@
                     android:textColor="#B39DDB"
                     android:background="@color/black_overlay"
                     android:onClick="register"
-                     />
+                    />
             </LinearLayout>
 
         </FrameLayout>
