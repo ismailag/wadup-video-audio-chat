@@ -267,11 +267,17 @@ public class FullscreenActivity extends AppCompatActivity {
            DataHolder.getInstance().stop();
            call.answer();
            if (type==R.id.next) //when it's a just voice call
-           {call.addCallListener(new SinchCallListener(this));}
+           {call.addCallListener(new SinchCallListener(this));
+           Button dec=(Button) findViewById(R.id.Decline) ;
+                   dec.setVisibility(View.GONE);
+           }
            else
            {
                call.addCallListener(new SinchVidListner(this));}
+           Button dec=(Button) findViewById(R.id.Decline) ;
+           dec.setVisibility(View.GONE);
            button.setText("Hang Up");
+
        }
        else if (!sinchClient.isStarted())
            sinchClient.start();
