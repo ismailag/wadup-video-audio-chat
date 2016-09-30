@@ -25,6 +25,9 @@ public class login extends AppCompatActivity {
     private FirebaseAuth auth ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (! Firebase.getDefaultConfig().isPersistenceEnabled())
+        {Firebase.setAndroidContext(this);
+        Firebase.getDefaultConfig().setPersistenceEnabled(true);}
         progress=new ProgressDialog(this) ;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);

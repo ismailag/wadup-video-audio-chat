@@ -6,6 +6,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.firebase.client.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
 import com.sinch.android.rtc.calling.Call;
 import com.sinch.android.rtc.calling.CallClient;
 import com.sinch.android.rtc.calling.CallClientListener;
@@ -53,6 +56,6 @@ public class SinchCallClientListener implements CallClientListener {
        }
 
         DataHolder.getInstance().play();
-
     }
+
 }

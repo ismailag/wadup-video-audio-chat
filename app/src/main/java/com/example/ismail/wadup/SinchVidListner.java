@@ -6,6 +6,7 @@ import android.media.AudioManager;
 
 import android.view.View;
 
+import com.firebase.client.Firebase;
 import com.sinch.android.rtc.AudioController;
 import com.sinch.android.rtc.PushPair;
 import com.sinch.android.rtc.calling.Call;

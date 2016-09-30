@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.client.Firebase;
+import com.google.firebase.auth.FirebaseAuth;
 import com.sinch.android.rtc.ClientRegistration;
 import com.sinch.android.rtc.Sinch;
 import com.sinch.android.rtc.SinchClient;
@@ -146,6 +147,7 @@ public class FullscreenActivity extends AppCompatActivity {
         sinchClient=DataHolder.getInstance().getClient();
         findViewById(R.id.call).setOnTouchListener(mDelayHideTouchListener);
         findViewById(R.id.Decline).setOnTouchListener(mDelayHideTouchListener);
+        new Firebase("https://wadup-a1d4b.firebaseio.com/.info/connected").addValueEventListener(new Connection_Mon());
         button = (Button) findViewById(R.id.call) ;
         vid =(Button) findViewById(R.id.nextv);
         aud=(Button) findViewById(R.id.next);
