@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "912685449424",
+    "firebase_url": "https://wadup-a1d4b.firebaseio.com",
+    "project_id": "wadup-a1d4b",
+    "storage_bucket": "wadup-a1d4b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:912685449424:android:246f0e319df27c14",
+        "android_client_info": {
+          "package_name": "com.example.ismail.wadup"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "912685449424-g1bmc8f8rdpiu6j4gh8g8fj8gd5gmpbv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdHeMSdPdV8qv4SUqJx3ajpxc-halQwGs"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
