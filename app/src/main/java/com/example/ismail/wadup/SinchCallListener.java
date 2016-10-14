@@ -71,6 +71,5 @@ public class SinchCallListener  implements CallListener {
     }
     @Override
     public void onShouldSendPushNotification(Call call, List<PushPair> pushPairs) {
-        //don't worry about this right now
     }
 }
